@@ -1,25 +1,38 @@
 import mongoose from "mongoose";
 
-const connectDB =async()=> {
-    const MONGOURL = process.env.MONGO_URL; 
+let cached = global._mongooseCache;
+if (!cached) {
+  cached = global._mongooseCache = { conn: null, promise: null };
+}
 
-    if (!MONGOURL){
-      console.error("Mongo_Url is missing in environment");
-      process.exit(1);
-    }
+const connectDB = async () => {
+  const MONGOURL = process.env.MONGO_URL;
 
-    try {
-      await mongoose.connect(MONGOURL);
-      console.log("DB connected successfully");
-    } catch(error) {
-      console.error("Database connection failed: ",error);
-      process.exit(1)
-    }
-
-
+  if (!MONGOURL) {
+    console.error("MONGO_URL is missing in environment");
+    return null;
   }
 
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGOURL)
+      .then((mongooseInstance) => {
+        console.log("DB connected successfully");
+        return mongooseInstance.connection;
+      })
+      .catch((error) => {
+        cached.promise = null;
+        console.error("Database connection failed:", error.message);
+        return null;
+      });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+};
+
 export default connectDB;
-   
-
-
