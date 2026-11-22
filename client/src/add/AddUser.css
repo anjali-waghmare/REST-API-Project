@@ -1,0 +1,36 @@
+.addUser {
+    background-color: white;
+    width: 25%;
+    margin: 50px auto;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.addUserForm .inputGroup{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.addUserFrom .inputGroup label {
+    margin-top: 5px ;
+}
+
+.addUserForm .inputGroup input {
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+.addUserForm .inputGroup button {
+    margin-top: 5px;
+} 
+
+.addUser h3{
+    margin-top: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: darkcyan;
+    text-transform: uppercase;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
